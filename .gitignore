@@ -1,0 +1,44 @@
+# Secrets and credentials. This repository is public: never commit any of these.
+*.p8
+*.p12
+*.pem
+*.key
+*.cer
+*.mobileprovision
+*.provisionprofile
+.env
+.env.*
+!.env.example
+secrets/
+**/participants.local.json
+
+# Recorded or captured audio must never be committed
+*.wav
+*.caf
+*.m4a
+*.mp3
+*.opus
+*.ogg
+*.pcm
+recordings/
+
+# Logs and experiment output that may contain identifiers
+*.log
+logs/
+results/raw/
+
+# macOS
+.DS_Store
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+.swiftpm/
+.build/
+
+# Node
+node_modules/
