@@ -1,0 +1,33 @@
+{
+  "note": "Golden wire fixtures shared by the Swift (ChirpCore) and Node (server) test suites. Fake data only.",
+  "client": [
+    { "type": "hello", "token": "EXAMPLE-ONLY-alpha-token", "deviceId": "alpha-device", "protocol": 1 },
+    { "type": "listening.register", "pttToken": "0a1b2c" },
+    { "type": "listening.register" },
+    { "type": "listening.unregister" },
+    { "type": "floor.request", "reqId": "11111111-1111-4111-8111-111111111111", "conversationId": "lab-1", "transmissionId": "22222222-2222-4222-8222-222222222222" },
+    { "type": "floor.release", "transmissionId": "22222222-2222-4222-8222-222222222222", "reason": "released" },
+    { "type": "floor.release", "transmissionId": "22222222-2222-4222-8222-222222222222", "reason": "sender-aborted" },
+    { "type": "attach", "transmissionId": "22222222-2222-4222-8222-222222222222" },
+    { "type": "clock.ping", "clientSentMs": 1234.5 }
+  ],
+  "server": [
+    { "type": "hello.ok", "participantRef": "abcdef0123", "serverTimeMs": 1700000000000 },
+    { "type": "hello.denied", "reason": "bad-token" },
+    { "type": "listening.ok" },
+    { "type": "floor.granted", "reqId": "11111111-1111-4111-8111-111111111111", "transmissionId": "22222222-2222-4222-8222-222222222222", "idleLeaseMs": 2000, "maxMs": 30000, "reachable": 1 },
+    { "type": "floor.denied", "reqId": "11111111-1111-4111-8111-111111111111", "reason": "busy" },
+    { "type": "floor.ended", "transmissionId": "22222222-2222-4222-8222-222222222222", "reason": "idle-lease-expired" },
+    { "type": "attach.ok", "transmissionId": "22222222-2222-4222-8222-222222222222", "startSeq": 0, "headDropped": false },
+    { "type": "attach.denied", "transmissionId": "22222222-2222-4222-8222-222222222222" },
+    { "type": "transmission.ended", "transmissionId": "22222222-2222-4222-8222-222222222222", "reason": "released", "lastSeq": 41 },
+    { "type": "clock.pong", "clientSentMs": 1234.5, "serverTimeMs": 1700000000100 },
+    { "type": "error", "reason": "bad-json" }
+  ],
+  "frames": [
+    { "seq": 0, "payloadHex": "", "wireHex": "00000000" },
+    { "seq": 1, "payloadHex": "aabbcc", "wireHex": "00000001aabbcc" },
+    { "seq": 305419896, "payloadHex": "ff", "wireHex": "12345678ff" },
+    { "seq": 4294967295, "payloadHex": "0102", "wireHex": "ffffffff0102" }
+  ]
+}
