@@ -59,7 +59,7 @@ Reproduce: see `RUNBOOK.md`, "Simulator check".
 
 | Suite | Command | Result |
 | --- | --- | --- |
-| Server (floor control, relay, authorization, buffer, APNs, WebSocket) | `cd server && npm test` | 65 passed, 0 failed |
+| Server (floor control, relay, authorization, buffer, APNs, WebSocket, collisions) | `cd server && npm test` | 66 passed, 0 failed |
 | Server typecheck | `cd server && npx tsc --noEmit` | clean |
 | Swift core (state machine, protocol, fixtures) | `cd ios/ChirpCore && swift test` | 29 passed, 0 failed |
 
@@ -82,8 +82,35 @@ What these establish, and what they do not:
   release during startup cannot be undone by any ordering of late callbacks (all
   orderings tested). After a forced stop nothing resumes. A randomized run covers
   every phase (coverage thresholds are asserted so it cannot pass vacuously).
+- Simultaneous presses: 300 trials over real WebSockets, two members requesting the
+  same conversation's floor back to back in random order (alpha won 160, bravo 140).
+  Every trial had exactly one grant, a "busy" answer for the other party, and a free
+  floor after release. This shows the one-speaker invariant under repeated contention
+  on a single event loop. It is not a test of true parallelism; a multi-process
+  deployment would need a shared arbiter and fresh tests.
 - These are logic tests against fakes. They do not prove behavior inside Apple's
   framework, over cellular, or with real audio.
+
+## Evidence 3: relay forwarding cost on loopback (Simulated, preliminary)
+
+Command: `cd server && npm run bench` (synthetic frames, one process, loopback).
+The sender and receiver share a clock, so these isolate what the relay itself adds.
+They are **not** end-to-end, **not** acoustic, and say nothing about cellular, Wi-Fi,
+APNs wake time or codec delay.
+
+| Measurement | n | p50 | p95 | max |
+| --- | --- | --- | --- | --- |
+| Relay hop, 20 ms paced frames, receiver already attached | 1000 frames | 0.41 ms | 0.66 ms | 1.76 ms |
+| Attach to first replayed frame, 250 buffered frames (5 s) | 20 trials | 4.66 ms | (preliminary) | 5.53 ms |
+| Attach to all 250 replayed frames | 20 trials | 5.16 ms | (preliminary) | 6.13 ms |
+
+The replay sample is small, so only p50 and max are meaningful. Relay process memory
+during the run was about 103 MB RSS, and buffered audio bytes returned to 0 afterward.
+One practical finding: a sender faster than 100 frames per second is throttled by
+design, so a benchmark (or a buggy client) cannot burst a whole buffer in at once.
+Conclusion for Experiment D: on loopback the relay hop is not a latency concern. The
+open questions are connection setup from a cold wake, audio-session coexistence and
+network behavior, none of which this measures.
 
 ## Blockers
 
