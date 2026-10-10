@@ -1,0 +1,33 @@
+name: ChirpLab
+options:
+  bundleIdPrefix: com.example
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "18.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    CODE_SIGN_STYLE: Automatic
+    # Intentionally blank in the repository. Set DEVELOPMENT_TEAM locally in Xcode
+    # (Signing & Capabilities) once an Apple Developer team is available.
+    DEVELOPMENT_TEAM: ""
+packages:
+  ChirpCore:
+    path: ../ChirpCore
+targets:
+  ChirpLab:
+    type: application
+    platform: iOS
+    sources:
+      - ChirpLab
+    dependencies:
+      - package: ChirpCore
+    settings:
+      base:
+        # Placeholder. The real bundle ID is a founder decision (it is registered
+        # with Apple and effectively permanent).
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.chirplab
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: ChirpLab/Support/Info.plist
+        CODE_SIGN_ENTITLEMENTS: ChirpLab/Support/ChirpLab.entitlements

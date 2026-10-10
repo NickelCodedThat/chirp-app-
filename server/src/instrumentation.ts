@@ -1,4 +1,5 @@
-import { appendFileSync } from "node:fs";
+import { appendFileSync, mkdirSync } from "node:fs";
+import { dirname } from "node:path";
 
 // Structured experiment events as JSON lines. Fields are restricted to
 // primitives, so audio payloads (byte arrays) cannot be logged by accident.
@@ -15,6 +16,7 @@ export class EventLog {
 
   constructor(opts: { path?: string; keepInMemory?: boolean } = {}) {
     this.#path = opts.path;
+    if (opts.path) mkdirSync(dirname(opts.path), { recursive: true });
     this.#keep = opts.keepInMemory ?? true;
   }
 
