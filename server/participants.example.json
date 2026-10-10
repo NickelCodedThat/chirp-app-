@@ -1,0 +1,12 @@
+{
+  "participants": [
+    { "id": "alpha", "token": "EXAMPLE-ONLY-alpha-token" },
+    { "id": "bravo", "token": "EXAMPLE-ONLY-bravo-token" },
+    { "id": "charlie", "token": "EXAMPLE-ONLY-charlie-token" }
+  ],
+  "conversations": [
+    { "id": "lab-1", "members": ["alpha", "bravo"] },
+    { "id": "lab-2", "members": ["alpha", "charlie"] }
+  ],
+  "blocks": []
+}
